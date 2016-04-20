@@ -5,16 +5,20 @@
 #include <io.h>
 #include <fcntl.h>
 
+#define PIPE_NAME TEXT("\\\\.\\pipe\\ndpipe")
+
 using namespace std;
 
 #ifdef UNICODE
 #define tstring wstring
 #define tcout  wcout
+#define tcerr wcerr
 #define tcin wcin
 #else
 #define tstring string 
 #define tcout cout
 #define tcin cin
+#define tcerr cerr
 #endif
 
 void utils(){
