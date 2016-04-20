@@ -1,7 +1,7 @@
 #ifndef COMUNICACAO_H
 #define COMUNICACAO_H
 
-#include "Util.h"
+#include "DungeonRPG\Util.h"
 
 
 class Comunicacao
