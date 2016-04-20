@@ -23,3 +23,4 @@ void utils(){
 	_setmode(_fileno(stdout), _O_WTEXT);
 #endif
 }
+
