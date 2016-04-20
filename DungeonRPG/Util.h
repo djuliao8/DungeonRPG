@@ -5,7 +5,6 @@
 #include <io.h>
 #include <fcntl.h>
 
-#define PIPE_NAME TEXT("\\\\.\\pipe\\ndpipe")
 
 using namespace std;
 
