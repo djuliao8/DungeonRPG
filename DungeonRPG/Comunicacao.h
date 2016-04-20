@@ -9,17 +9,15 @@ class Comunicacao
 	static const tstring NamedPipeEscrita;
 	static const tstring NamedPipeLeitura;
 
-	void terminaCliente();
+	void terminaComunicacao();
 	HANDLE hServerPipeEscrita;
 	HANDLE hServerPipeLeitura;
 public:
-	static const tstring getNomeNamedPipeEscrita();
-	static const tstring getNomeNamedPipeLeitura();
 
 	Comunicacao();
 	~Comunicacao();
 	bool enviaComando(tstring linhaComando);
-	bool recebeMensagem(ptrMensagemJogo & mJ);
+	tstring recebeComando();
 };
 
 
