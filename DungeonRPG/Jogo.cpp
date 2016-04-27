@@ -1,4 +1,3 @@
-#include "DungeonComunicacao\Comunicacao.h"
 #include "Jogo.h"
 #include "Mapa.h"
 
@@ -32,7 +31,8 @@ bool Jogo::Comandos(tstring cmd){ //Este comando tem de vir da comunicação do cl
 	if (!validade)
 		tcout << "Comando não é válido";
 	else{
-		if (EstadoDeJogo == 0){
+		if (EstadoDeJogo == LOGIN)
+		if (EstadoDeJogo == QUEROJOGAR){
 			//Tem de se colocar estados nos comandos, para que só admita certos comandos nos momentos certos do jogo
 			if (BufferComandoLido[0] == TEXT("criar") && BufferComandoLido.size() == 3){ //Validar comando e número de argumentos
 				if (BufferComandoLido[1] == TEXT("pre")){

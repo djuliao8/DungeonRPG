@@ -1,4 +1,4 @@
-#include "DungeonComunicacao\Comunicacao.h"
+#include "Util.h"
 #include "CelulaMapa.h"
 
 class Mapa{ //Conjunto de CelulaMapa's
