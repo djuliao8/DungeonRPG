@@ -11,6 +11,7 @@
 #include <fcntl.h>
 #include <vector>
 #include <sstream>
+#include <fstream>
 
 #define TAM 1024
 #define PIPE_LEITURA TEXT("\\\\.\\pipe\\PipeLeitura")//Le

@@ -12,5 +12,6 @@ class Jogo{
 	int EstadoDeJogo = LOGIN;
 	public:
 		void Jogar();
-		bool Comandos(tstring cmd);		
+		bool Comandos(tstring cmd);
+		bool autenticacao();
 };
