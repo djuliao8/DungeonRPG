@@ -32,7 +32,7 @@ int _tmain(int argc, LPTSTR argv[]) {
 			for (int i = 0; i < total; i++)
 				if (!WriteFile(PipeLeitores[i], (LPCVOID)&j, sizeof(j), &n, NULL))
 				{
-					tcerr << TEXT("[ERRO] Escrever no pipe!") << endl;
+					tcout << TEXT("[ERRO] Escrever no pipe!") << endl;
 					exit(-1);
 				}
 		}
@@ -59,7 +59,7 @@ DWORD WINAPI RecebeLeitores(LPVOID param) {
 		
 		if (PipeLeitores[total] == INVALID_HANDLE_VALUE) 
 		{
-			tcerr << TEXT("[ERRO] na ligação ao leitor!") << endl;
+			tcout << TEXT("[ERRO] na ligação ao leitor!") << endl;
 			exit(-1);
 		}
 		
@@ -69,14 +69,14 @@ DWORD WINAPI RecebeLeitores(LPVOID param) {
 		
 		if (hPipe == INVALID_HANDLE_VALUE) 
 		{
-			tcerr << TEXT("[ERRO] na ligação ao leitor!") << endl;
+			tcout << TEXT("[ERRO] na ligação ao leitor!") << endl;
 			exit(-1);
 		}
 
 		tcout << TEXT("[SERVIDOR] Esperar ligação de leitor!") << endl;
 		if (!ConnectNamedPipe(PipeLeitores[total], NULL)) 
 		{
-			tcerr << TEXT("[ERRO] na ligação ao leitor!") << endl;
+			tcout << TEXT("[ERRO] na ligação ao leitor!") << endl;
 			exit(-1);
 		}
 
