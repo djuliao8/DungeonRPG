@@ -51,8 +51,10 @@ bool Jogo::Comandos(tstring cmd){ //Este comando tem de vir da comunicação do cl
 				//do stuff
 			}
 		}
-		if (EstadoDeJogo = AJOGAR){}
-		//... outros comandos!
+		if (EstadoDeJogo = AJOGAR){
+			//... outros comandos!
+		}
+		
 	}
 	
 	return false;
