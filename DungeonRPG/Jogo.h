@@ -9,7 +9,7 @@ class Jogo{
 	vector<tstring> cmdValidos = {TEXT("criar"), TEXT("juntar")}; //Irá ter mais
 	tstring comandoLido;
 	vector<tstring> BufferComandoLido; 
-	int EstadoDeJogo;
+	int EstadoDeJogo = LOGIN;
 	public:
 		void Jogar();
 		bool Comandos(tstring cmd);		

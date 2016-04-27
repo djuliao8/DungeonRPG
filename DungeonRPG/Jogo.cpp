@@ -31,18 +31,19 @@ bool Jogo::Comandos(tstring cmd){ //Este comando tem de vir da comunicação do cl
 	if (!validade)
 		tcout << "Comando não é válido";
 	else{
-		if (EstadoDeJogo == LOGIN)
+		if (EstadoDeJogo == LOGIN){
+		}
 		if (EstadoDeJogo == QUEROJOGAR){
 			//Tem de se colocar estados nos comandos, para que só admita certos comandos nos momentos certos do jogo
 			if (BufferComandoLido[0] == TEXT("criar") && BufferComandoLido.size() == 3){ //Validar comando e número de argumentos
 				if (BufferComandoLido[1] == TEXT("pre")){
 					mapa = new Mapa(70, 70); //Valor pré-definido
-					EstadoDeJogo = 1;
+					EstadoDeJogo = AJOGAR;
 					return true;
 				}
 				else{
 					mapa = new Mapa(stoi(TEXT("" + BufferComandoLido[1])), stoi(TEXT("" + BufferComandoLido[2]))); //stoi converte para int
-					EstadoDeJogo = 1;
+					EstadoDeJogo = AJOGAR;
 					return true;
 				}
 			} if (BufferComandoLido[0] == TEXT("juntar") && BufferComandoLido.size() == 1){
@@ -50,6 +51,7 @@ bool Jogo::Comandos(tstring cmd){ //Este comando tem de vir da comunicação do cl
 				//do stuff
 			}
 		}
+		if (EstadoDeJogo = AJOGAR){}
 		//... outros comandos!
 	}
 	
