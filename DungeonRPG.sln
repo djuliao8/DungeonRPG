@@ -1,13 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DungeonRPG", "DungeonRPG\DungeonRPG.vcxproj", "{D7AF1EE2-FCB9-4961-B2E5-2BD20AFA57DF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DungeonCliente", "DungeonCliente\DungeonCliente.vcxproj", "{FDD38F72-AA46-457F-8DB5-006F092E0038}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DungeonComunicacao", "DungeonComunicacao\DungeonComunicacao.vcxproj", "{CCBCD39D-AB48-49FA-9A90-9AE4C24F5204}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +21,6 @@ Global
 		{FDD38F72-AA46-457F-8DB5-006F092E0038}.Debug|Win32.Build.0 = Debug|Win32
 		{FDD38F72-AA46-457F-8DB5-006F092E0038}.Release|Win32.ActiveCfg = Release|Win32
 		{FDD38F72-AA46-457F-8DB5-006F092E0038}.Release|Win32.Build.0 = Release|Win32
-		{CCBCD39D-AB48-49FA-9A90-9AE4C24F5204}.Debug|Win32.ActiveCfg = Debug|Win32
-		{CCBCD39D-AB48-49FA-9A90-9AE4C24F5204}.Debug|Win32.Build.0 = Debug|Win32
-		{CCBCD39D-AB48-49FA-9A90-9AE4C24F5204}.Release|Win32.ActiveCfg = Release|Win32
-		{CCBCD39D-AB48-49FA-9A90-9AE4C24F5204}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
