@@ -1,12 +1,15 @@
 #include "Jogo.h"
-#include "Mapa.h"
+
+
+//Inicialização de vector constante de comandos válidos
+const vector<tstring> Jogo::cmdValidos = { TEXT("criar"), TEXT("juntar") }; //Irá ter mais
 
 void Jogo::Jogar(){
-	//Fazer uma thread para receber comandos
 
 }
 
-bool Jogo::autenticacao(){
+//Função que procura no ficheiro para que possa autenticar o cliente
+bool Jogo::Autenticacao(){
 	tstring line;
 	tfstream myfile("login.txt");
 	if (myfile.good()){
@@ -53,7 +56,7 @@ bool Jogo::Comandos(tstring cmd){ //Este comando tem de vir da comunicação do cl
 		tcout << "Comando não é válido";
 	else{
 		if (EstadoDeJogo == LOGIN){
-			if (autenticacao()){ //Enviar cliente a avisar que o cliente foi autenticado
+			if (Autenticacao()){ //Enviar cliente a avisar que o cliente foi autenticado
 				EstadoDeJogo = QUEROJOGAR;
 				return true;
 			}
@@ -85,5 +88,4 @@ bool Jogo::Comandos(tstring cmd){ //Este comando tem de vir da comunicação do cl
 	
 	return false;
 }
-
 

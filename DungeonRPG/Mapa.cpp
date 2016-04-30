@@ -1,4 +1,3 @@
-#include "CelulaMapa.h"
 #include "Mapa.h"
 
 Mapa::Mapa(int lin, int col){
@@ -6,3 +5,4 @@ Mapa::Mapa(int lin, int col){
 	colunas = col;
 	celula = new CelulaMapa[lin*col];
 }
+

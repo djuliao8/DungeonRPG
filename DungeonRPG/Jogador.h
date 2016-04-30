@@ -1,5 +1,8 @@
-#include "Util.h"
+#ifndef JOGADOR_HEADER
+#define JOGADOR_HEADER
+
 #include "Objectos.h"
+#include "Util.h"
 
 //Classe que representa um jogador
 
@@ -10,3 +13,5 @@ class Jogador{
 	public:
 		Jogador(tstring n); 
 };
+
+#endif

@@ -14,6 +14,12 @@ DWORD WINAPI AtendeCliente(LPVOID param);
 
 
 int _tmain(int argc, LPTSTR argv[]) {
+	#ifdef UNICODE
+		_setmode(_fileno(stdin), _O_WTEXT);
+		_setmode(_fileno(stdout), _O_WTEXT);
+		_setmode(_fileno(stderr), _O_WTEXT);
+	#endif
+	
 	DWORD n;
 	HANDLE hThread;
 	Jogo j;

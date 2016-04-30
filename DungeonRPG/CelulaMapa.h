@@ -1,8 +1,10 @@
+#ifndef CELULA_HEADER
+#define CELULA_HEADER
+
 #include "Util.h"
+#include "Jogador.h"
 #include "Monstro.h"
 #include "Objectos.h"
-#include "Jogador.h"
-
 //Classe que representa cada Celula do Mapa
 
 class CelulaMapa{ 
@@ -13,3 +15,5 @@ class CelulaMapa{
 	public:
 		CelulaMapa();
 };
+
+#endif

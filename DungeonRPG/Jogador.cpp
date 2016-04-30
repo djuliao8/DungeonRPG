@@ -6,3 +6,4 @@ Jogador::Jogador(tstring n){
 	nome = n;
 	obj.clear();
 }
+

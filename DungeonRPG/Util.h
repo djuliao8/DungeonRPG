@@ -12,6 +12,7 @@
 #include <vector>
 #include <sstream>
 #include <fstream>
+#include <cstdlib>
 
 #define TAM 1024
 #define PIPE_LEITURA TEXT("\\\\.\\pipe\\PipeLeitura")//Le
@@ -40,16 +41,16 @@ using namespace std;
 #define to_tstring to_string
 #define tstringstream stringstream
 #endif
-void utils() {
+/*void utils() {
 #ifdef UNICODE
 	_setmode(_fileno(stdin), _O_WTEXT);
 	_setmode(_fileno(stdout), _O_WTEXT);
 	_setmode(_fileno(stderr), _O_WTEXT);
 #endif
-}
+}*/
 
 typedef struct Jogos {
 	TCHAR cmd[TAM];
-}Jogo;
+}Jogos;
 
 #endif
