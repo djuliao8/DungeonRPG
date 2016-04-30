@@ -1,19 +1,104 @@
 #include "DungeonRPG\Util.h"
 
-DWORD WINAPI EnviaComando(LPVOID param);
+
+HANDLE hPipeLeitura, hPipeEscrita;
+HANDLE hThreadRecebe;
+HANDLE hMutex;
+bool threadActiva = true;
+bool modoScroll = false;
+
+void iniciaPipes();
+void intro();
+bool enviaComando(TCHAR * cmd);
 DWORD WINAPI RecebeComando(LPVOID param);
 
-int _tmain(int argc, LPTSTR argv[]){
+int _tmain(int argc, LPTSTR argv[]) {
+	tstring cmd;
+	TCHAR tcmd[TAM];
+	TCHAR tecla;
 
-	HANDLE hPipeLeitura, hPipeEscrita;
-	HANDLE hThreadRecebe, hThreadEnvia;
-	DWORD n;
-	Jogo j;
+#ifdef UNICODE
+	_setmode(_fileno(stdin), _O_WTEXT);
+	_setmode(_fileno(stdout), _O_WTEXT);
+	_setmode(_fileno(stderr), _O_WTEXT);
+#endif
 
-	utils();
+	//Cria mutex
+	hMutex = CreateMutex(NULL, FALSE, NULL);
+
+	//Inicia o pipe de escrita e leitura 
+	iniciaPipes();
+
+	// Inicia a thread para receber
+	hThreadRecebe = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)RecebeComando, (LPVOID)hPipeLeitura, 0, NULL);
+
+	//Apresenta mensagem do jogo
+	intro();
+
+	do
+	{
+		if (!modoScroll)
+		{
+			fflush(stdin);
+			getline(tcin, cmd);
+
+			if (cmd == TEXT("scroll"))
+			{
+				modoScroll = true;
+				cmd = TEXT("scroll 0 0");
+			}
+		}
+		else
+		{
+			tecla = c.getch();
+
+			if (tolower(tecla) == TEXT('c'))
+			{
+				modoScroll = false;
+			}
+
+			switch (tecla)
+			{
+			case c.CIMA: cmd = TEXT("scroll -1 0"); break;
+			case c.BAIXO: cmd = TEXT("scroll 1 0"); break;
+			case c.DIREITA: cmd = TEXT("scroll 0 1"); break;
+			case c.ESQUERDA: cmd = TEXT("scroll 0 -1"); break;
+			default: cmd = TEXT("scroll 0 0");
+			}
+		}
+
+		//Para passar de string para TCHAR
+		_tcscpy(tcmd, cmd.c_str());
+
+		//Envia comando, se falhar sai
+		if (!enviaComando(tcmd))
+			return 0;
+
+	} while (cmd != TEXT("sair"));
+
+	threadActiva = false;
+	
+	CloseHandle(hPipeEscrita);
+	CloseHandle(hPipeLeitura);
+
+	Sleep(200);
+	return 0;
+}
+
+void intro() 
+{
+	tcout << TEXT("\t\t Dungeon RPG - Trabalho de SO2 \n\n\n");
+	tcout << TEXT("\t Trabalho realizado por: \n\n");
+	tcout << TEXT("\t\t David Julião - 21230100 \n");
+	tcout << TEXT("\t\t Luís Antunes - 21230122 \n\n\n");
+	tcout << TEXT("\t Comando > ");
+}
+
+void iniciaPipes() 
+{
 
 	tcout << TEXT("[CLIENTE] Esperar pelo pipe!") << endl;
-	if (!WaitNamedPipe(PIPE_LEITURA, NMPWAIT_WAIT_FOREVER)) 
+	if (!WaitNamedPipe(PIPE_LEITURA, NMPWAIT_WAIT_FOREVER))
 	{
 		tcout << TEXT("[ERRO] Ligar ao pipe!") << endl;
 		exit(-1);
@@ -22,110 +107,35 @@ int _tmain(int argc, LPTSTR argv[]){
 	tcout << TEXT("[CLIENTE] Ligação ao servidor!") << endl;
 
 	hPipeLeitura = CreateFile(PIPE_LEITURA, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-	if (hPipeLeitura == NULL) 
+	if (hPipeLeitura == NULL)
 	{
 		tcout << TEXT("[ERRO] Ligar ao pipe!") << endl;
 		exit(-1);
 	}
 
 	hPipeEscrita = CreateFile(PIPE_ESCRITA, GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-	if (hPipeEscrita == NULL) 
+	if (hPipeEscrita == NULL)
 	{
 		tcout << TEXT("[ERRO] Ligar ao pipe!") << endl;
 		exit(-1);
 	}
 
-	//Thread que envia e recebe dados
-	hThreadEnvia = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)EnviaComando, (LPVOID)hPipeEscrita, 0, NULL);
-	hThreadRecebe = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)RecebeComando, (LPVOID)hPipeLeitura, 0, NULL);
-
 	tcout << TEXT("[CLIENTE] Liguei-me!") << endl;
-
-
-	WaitForSingleObject(hThreadEnvia, INFINITE);
-	WaitForSingleObject(hThreadRecebe, INFINITE);
-
-	CloseHandle(hPipeEscrita);
-	CloseHandle(hPipeLeitura);
-
-	
-
-	Sleep(200);
-	return 0;
 }
 
-//Envia comandos
+//Envia comando
 
-void criarjogo() {
-	Comunicacao* c = new Comunicacao();
-	system("cls");
-	int op = 0, tamX = 0, tamY = 0;
-	tcout << "1 - Jogar com mapa pré-definido \n";
-	tcout << "2 - Escolher dimensões do mapa \n";
-	tcout << "3 - Sair \n";
-	while (op <= 0 || op >= 4) {
-		tcout << "Opção: ";
-		tcin >> op;
-		if (op > 0 && op < 4) {
-			switch (op) {
-			case 1:c->enviaComando(TEXT("criar pre"));
-				break;
-			case 2: tcout << "Escolha dimensões: (Minimo 70/70)\n";
-				while (tamX < 70 || tamY < 70) {
-					tcout << "Escreva respectivamente o tamanho X e Y: ";
-					tcin >> tamX >> tamY;
-				}
+bool enviaComando(TCHAR *cmd) 
+{
+	if (hPipeEscrita == NULL)
+		return false;
 
-				c->enviaComando(TEXT("criar" + tamX + tamY));
-				break;
-			case 3:exit(0);
-			default: exit(0);
-			}
-		}
-	}
-}
-
-DWORD WINAPI EnviaComando(LPVOID param) {
-
-
-
-
-int _tmain(int argc, LPTSTR argv[]){
-	Comunicacao* c = new Comunicacao();
-	utils();
-	int op = 0;
-	tcout <<"Dungeon RPG \n\n\n";
-	tcout << "1 - Criar Jogo \n";
-	tcout << "2 - Juntar a Jogo \n";
-	tcout << "3 - Sair \n";
-	while (op <= 0 || op >= 4){
-		tcout << "Opcao: ";
-		tcin >> op;
-		if (op > 0 && op < 4){
-			switch (op){
-			case 1:criarjogo();
-					break;
-			case 2: c->enviaComando(TEXT("juntar"));
-					break;
-			case 3:exit(0);
-			default: exit(0);
-			}
-		}
-	}
-	system("pause");
-}
-	HANDLE pipe = (HANDLE)param;
 	DWORD n;
-	Jogo j;
-
-	while (1)
-	{
-		tcout << TEXT("\n[CLIENTE] Frase: ");
-		tcin >> j.cmd;
-		WriteFile(pipe, (LPCVOID)&j, sizeof(j), &n, NULL);
-	}
-	return 0;
+	if (!WriteFile(hPipeEscrita, cmd, 1024 * sizeof(TCHAR), &n, NULL))
+		return false;
+	return true;
 }
+
 
 //Recebe comando
 
@@ -133,18 +143,16 @@ DWORD WINAPI RecebeComando(LPVOID param) {
 
 	HANDLE pipe = (HANDLE)param;
 	DWORD n;
-	BOOL ret;
 	Jogo j;
 
-	while (1)
+	while (threadActiva)
 	{
-		ret = ReadFile(pipe, (LPVOID)&j, sizeof(j), &n, NULL);
-		if (n > 0)
-		{
-			if (!ret || !n)
-				break;
-			tcout << TEXT("[CLIENTE] Recebi - ") << j.cmd;
-		}
+		if (!ReadFile(pipe, (LPVOID)&j, sizeof(j), &n, NULL))
+			return 0;
+		
+		//FALTA GERIR A INFORMAÇÂO RECEBIDA
+
+		tcout << TEXT("[CLIENTE] Recebi - ") << j.cmd;
 	}
 
 	return 0;

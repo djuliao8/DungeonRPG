@@ -1,11 +1,11 @@
 #include "Util.h"
+#include "Jogador.h"
 
 
 
 #define N_MAX_LEITORES 10
 
-HANDLE PipeLeitores[N_MAX_LEITORES];
-HANDLE hPipe;
+vector<Jogador> jogadores;
 int total;
 BOOL fim = FALSE;
 
@@ -14,29 +14,17 @@ DWORD WINAPI AtendeCliente(LPVOID param);
 
 
 int _tmain(int argc, LPTSTR argv[]) {
-	DWORD n;
 	HANDLE hThread;
-	Jogo j;
 
-	utils();
+#ifdef UNICODE
+	_setmode(_fileno(stdin), _O_WTEXT);
+	_setmode(_fileno(stdout), _O_WTEXT);
+	_setmode(_fileno(stderr), _O_WTEXT);
+#endif
 
 	//Thread para novos jogadores
 	hThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)RecebeLeitores, NULL, 0, NULL);
 
-	do {
-		tcout << endl << TEXT("[SERVIDOR] Frase: ");
-		tcin >> j.cmd;
-		
-		if (_tcscmp(j.cmd,TEXT("")) != 0) 
-		{
-			for (int i = 0; i < total; i++)
-				if (!WriteFile(PipeLeitores[i], (LPCVOID)&j, sizeof(j), &n, NULL))
-				{
-					tcout << TEXT("[ERRO] Escrever no pipe!") << endl;
-					exit(-1);
-				}
-		}
-	}while (_tcscmp(j.cmd, TEXT("fim")) != 0);
 	
 	fim = TRUE;
 
@@ -47,71 +35,102 @@ int _tmain(int argc, LPTSTR argv[]) {
 }
 
 DWORD WINAPI RecebeLeitores(LPVOID param) {
-	HANDLE hPipe;
+	HANDLE hPipeEnviar, hPipeReceber;
 
-	while (!fim && total < N_MAX_LEITORES)
+	while (!fim && jogadores.size() < N_MAX_LEITORES)
 	{
 		tcout << TEXT("[SERVIDOR] Vou criar pipe!") << endl;
 
-		PipeLeitores[total] = CreateNamedPipe(PIPE_LEITURA, PIPE_ACCESS_OUTBOUND, PIPE_WAIT | PIPE_TYPE_MESSAGE
+		hPipeEnviar = CreateNamedPipe(PIPE_LEITURA, PIPE_ACCESS_OUTBOUND, PIPE_WAIT | PIPE_TYPE_MESSAGE
 			| PIPE_READMODE_MESSAGE, N_MAX_LEITORES, TAM * sizeof(TCHAR), TAM * sizeof(TCHAR),
 			1000, NULL);
-		
-		if (PipeLeitores[total] == INVALID_HANDLE_VALUE) 
-		{
-			tcout << TEXT("[ERRO] na ligação ao leitor!") << endl;
-			exit(-1);
-		}
-		
-		hPipe = CreateNamedPipe(PIPE_ESCRITA, PIPE_ACCESS_INBOUND, PIPE_WAIT | PIPE_TYPE_MESSAGE
-			| PIPE_READMODE_MESSAGE, N_MAX_LEITORES, TAM * sizeof(TCHAR), TAM * sizeof(TCHAR),
-			1000, NULL);
-		
-		if (hPipe == INVALID_HANDLE_VALUE) 
-		{
-			tcout << TEXT("[ERRO] na ligação ao leitor!") << endl;
-			exit(-1);
-		}
 
 		tcout << TEXT("[SERVIDOR] Esperar ligação de leitor!") << endl;
-		if (!ConnectNamedPipe(PipeLeitores[total], NULL)) 
+		if (!ConnectNamedPipe(hPipeEnviar, NULL))
+		{
+			tcout << TEXT("[ERRO] na ligação ao leitor!") << endl;
+			exit(-1);
+		}
+		
+		hPipeReceber = CreateNamedPipe(PIPE_ESCRITA, PIPE_ACCESS_INBOUND, PIPE_WAIT | PIPE_TYPE_MESSAGE
+			| PIPE_READMODE_MESSAGE, N_MAX_LEITORES, TAM * sizeof(TCHAR), TAM * sizeof(TCHAR),
+			1000, NULL);
+
+		tcout << TEXT("[SERVIDOR] Esperar ligação de leitor!") << endl;
+		if (!ConnectNamedPipe(hPipeReceber, NULL))
+		{
+			tcout << TEXT("[ERRO] na ligação ao leitor!") << endl;
+			exit(-1);
+		}
+		
+		if (hPipeReceber == INVALID_HANDLE_VALUE || hPipeEnviar == INVALID_HANDLE_VALUE)
 		{
 			tcout << TEXT("[ERRO] na ligação ao leitor!") << endl;
 			exit(-1);
 		}
 
-		CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)AtendeCliente, (LPVOID)hPipe, 0, NULL);
-		total++;
+		jogadores.push_back(Jogador(hPipeEnviar, hPipeReceber));
+
+		CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)AtendeCliente, (LPVOID)hPipeReceber,0, NULL);
 	}
 
-	for (int i = 0; i < total; i++) 
-	{
-		DisconnectNamedPipe(PipeLeitores[i]);
-		tcout << TEXT("[SERVIDOR] Desligar pipe!") << endl;
-		CloseHandle(PipeLeitores[i]);
-	}
+
 	return 0;
 }
 
-DWORD WINAPI AtendeCliente(LPVOID param) {
-	HANDLE pipe = (HANDLE)param;
-	Jogo j;
-	DWORD n;
-	int ret;
+bool autenticaUser(TCHAR * user) {
+	tstring line;
+	tfstream myfile("login.txt");
 
-	tcout << j.cmd;
-	
-	while (1) 
+	if (myfile.good()) 
 	{
-		ret = ReadFile(pipe, (LPVOID)&j, sizeof(j), &n, NULL);
-		
-		if (n > 0 && j.cmd != TEXT("")) 
+		while (getline(myfile, line)) 
 		{
-			tcout << TEXT("[SERVIDOR] Recebi - ") << j.cmd;
-			
-			for (int i = 0; i < total; i++) 
-				WriteFile(PipeLeitores[i], (LPCVOID)&j, sizeof(j), &n, NULL);
+			if (_tcscmp(line.c_str(),user) == 0)
+				return true;	
 		}
+		myfile.close();		
 	}
+	return false;
+}
+
+
+TCHAR * recebeComando(HANDLE hPipe) {
+	TCHAR cmd[TAM];
+	DWORD n;
+
+	ReadFile(hPipe, cmd, 1024 * sizeof(TCHAR), &n, NULL);
+
+	if (n > 0 && cmd != TEXT(""))
+		return cmd;
+	return TEXT("Erro!");
+}
+
+DWORD WINAPI AtendeCliente(LPVOID param) {
+	
+	HANDLE hPipeReceber = (HANDLE)param;
+
+	DWORD nBytes;
+	TCHAR cmd[TAM];
+	
+	getJogadorByPipe(hPipeReceber)->setHThread(GetCurrentThread());
+	
+	do {
+		ReadFile(hPipeReceber,cmd, 1024, &nBytes, NULL);
+
+		cmd[nBytes / sizeof(TCHAR)] = '\0';
+
+	} while ();
+
 	return 0;
+}
+
+Jogador * getJogadorByPipe(HANDLE hPipe) {
+	for (int i = 0; i < (int)jogadores.size(); i++)
+	{
+		if (jogadores[i].getHPipeReceber() == hPipe)
+			return &jogadores[i];
+	}
+
+	return nullptr;
 }

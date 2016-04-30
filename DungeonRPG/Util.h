@@ -11,10 +11,19 @@
 #include <fcntl.h>
 #include <vector>
 #include <sstream>
+#include <iostream>
+#include <fstream>
+
 
 #define TAM 1024
 #define PIPE_LEITURA TEXT("\\\\.\\pipe\\PipeLeitura")//Le
 #define PIPE_ESCRITA TEXT("\\\\.\\pipe\\PipeEscrita")//Escreve
+
+//Estados
+
+#define LOGIN 0
+#define QUEROJOGAR 1
+#define AJOGAR 2
 
 using namespace std;
 
@@ -39,13 +48,6 @@ using namespace std;
 #define to_tstring to_string
 #define tstringstream stringstream
 #endif
-void utils() {
-#ifdef UNICODE
-	_setmode(_fileno(stdin), _O_WTEXT);
-	_setmode(_fileno(stdout), _O_WTEXT);
-	_setmode(_fileno(stderr), _O_WTEXT);
-#endif
-}
 
 typedef struct Jogos {
 	TCHAR cmd[TAM];
