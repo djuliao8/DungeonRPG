@@ -1,8 +1,8 @@
 #include "Util.h"
+#include "Mapa.h"
 
 
-
-#define N_MAX_LEITORES 10
+/*#define N_MAX_LEITORES 10
 
 HANDLE PipeLeitores[N_MAX_LEITORES];
 HANDLE hPipe;
@@ -10,7 +10,7 @@ int total;
 BOOL fim = FALSE;
 
 DWORD WINAPI RecebeLeitores(LPVOID param);
-DWORD WINAPI AtendeCliente(LPVOID param);
+DWORD WINAPI AtendeCliente(LPVOID param);*/
 
 
 int _tmain(int argc, LPTSTR argv[]) {
@@ -19,12 +19,13 @@ int _tmain(int argc, LPTSTR argv[]) {
 		_setmode(_fileno(stdout), _O_WTEXT);
 		_setmode(_fileno(stderr), _O_WTEXT);
 	#endif
-	
-	DWORD n;
-	HANDLE hThread;
-	Jogo j;
 
-	utils();
+	Mapa *mapa = new Mapa(10, 10);
+	
+	/*DWORD n;
+	HANDLE hThread;
+	Jogos j;
+
 
 	//Thread para novos jogadores
 	hThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)RecebeLeitores, NULL, 0, NULL);
@@ -119,5 +120,5 @@ DWORD WINAPI AtendeCliente(LPVOID param) {
 				WriteFile(PipeLeitores[i], (LPCVOID)&j, sizeof(j), &n, NULL);
 		}
 	}
-	return 0;
+	return 0;*/
 }

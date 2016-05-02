@@ -9,9 +9,11 @@
 class Jogador{
 	int saude,lentidao;
 	tstring nome;
-	vector <Objectos *> obj;
+	vector <Objectos> obj;
 	public:
 		Jogador(tstring n); 
+		void addObjecto();
+		void efeitosObjectos();
 };
 
 #endif

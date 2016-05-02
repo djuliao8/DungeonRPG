@@ -11,9 +11,14 @@ class CelulaMapa{
 	Monstro *monstro;
 	Objectos *objecto;
 	int parede;// 0 - Não tem parede, 1 - Tem parede
+	int porta; // 0- Não tem porta, 1 - Tem porta.... Se tem porta não pode ter parede!!! 
 	Jogador *jogador;
 	public:
 		CelulaMapa();
+		void setMonstro();
+		void setParede();
+		void setObjecto();
+		void setPorta();
 };
 
 #endif
