@@ -1,4 +1,4 @@
-#include "DungeonRPG\Util.h"
+#include "Util.h"
 
 
 HANDLE hPipeLeitura, hPipeEscrita;
@@ -10,7 +10,7 @@ bool modoScroll = false;
 void iniciaPipes();
 void intro();
 bool enviaComando(TCHAR * cmd);
-DWORD WINAPI RecebeComando(LPVOID param);
+DWORD WINAPI RecebeMensagem(LPVOID param);
 
 int _tmain(int argc, LPTSTR argv[]) {
 	tstring cmd;
@@ -30,15 +30,15 @@ int _tmain(int argc, LPTSTR argv[]) {
 	iniciaPipes();
 
 	// Inicia a thread para receber
-	hThreadRecebe = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)RecebeComando, (LPVOID)hPipeLeitura, 0, NULL);
+	hThreadRecebe = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)RecebeMensagem, (LPVOID)hPipeLeitura, 0, NULL);
 
 	//Apresenta mensagem do jogo
 	intro();
 
 	do
 	{
-		if (!modoScroll)
-		{
+		//if (!modoScroll)
+		//{
 			fflush(stdin);
 			getline(tcin, cmd);
 
@@ -47,7 +47,7 @@ int _tmain(int argc, LPTSTR argv[]) {
 				modoScroll = true;
 				cmd = TEXT("scroll 0 0");
 			}
-		}
+		/*}
 		else
 		{
 			tecla = c.getch();
@@ -66,13 +66,13 @@ int _tmain(int argc, LPTSTR argv[]) {
 			default: cmd = TEXT("scroll 0 0");
 			}
 		}
+		*/
 
 		//Para passar de string para TCHAR
 		_tcscpy(tcmd, cmd.c_str());
 
 		//Envia comando, se falhar sai
-		if (!enviaComando(tcmd))
-			return 0;
+		enviaComando(tcmd);
 
 	} while (cmd != TEXT("sair"));
 
@@ -87,11 +87,11 @@ int _tmain(int argc, LPTSTR argv[]) {
 
 void intro() 
 {
-	tcout << TEXT("\t\t Dungeon RPG - Trabalho de SO2 \n\n\n");
+	tcout << TEXT("\n\n\t\t Dungeon RPG - Trabalho de SO2 \n\n\n");
 	tcout << TEXT("\t Trabalho realizado por: \n\n");
 	tcout << TEXT("\t\t David Julião - 21230100 \n");
 	tcout << TEXT("\t\t Luís Antunes - 21230122 \n\n\n");
-	tcout << TEXT("\t Comando > ");
+	tcout << TEXT("[CLIENTE] Comando > ");
 }
 
 void iniciaPipes() 
@@ -131,7 +131,7 @@ bool enviaComando(TCHAR *cmd)
 		return false;
 
 	DWORD n;
-	if (!WriteFile(hPipeEscrita, cmd, 1024 * sizeof(TCHAR), &n, NULL))
+	if (!WriteFile(hPipeEscrita, cmd, _tcslen(cmd) * sizeof(TCHAR), &n, NULL))
 		return false;
 	return true;
 }
@@ -139,20 +139,18 @@ bool enviaComando(TCHAR *cmd)
 
 //Recebe comando
 
-DWORD WINAPI RecebeComando(LPVOID param) {
-
-	HANDLE pipe = (HANDLE)param;
+DWORD WINAPI RecebeMensagem(LPVOID param) {
 	DWORD n;
-	Jogo j;
+	Msg msg;
 
 	while (threadActiva)
 	{
-		if (!ReadFile(pipe, (LPVOID)&j, sizeof(j), &n, NULL))
-			return 0;
+		ReadFile((HANDLE)param, (LPVOID)&msg, sizeof(msg), &n, NULL);
 		
 		//FALTA GERIR A INFORMAÇÂO RECEBIDA
 
-		tcout << TEXT("[CLIENTE] Recebi - ") << j.cmd;
+		tcout << TEXT("[CLIENTE] Recebi - ") << msg.cmd << endl;
+		tcout << TEXT("[CLIENTE] Comando > ");
 	}
 
 	return 0;

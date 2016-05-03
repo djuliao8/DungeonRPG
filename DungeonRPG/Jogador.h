@@ -1,5 +1,8 @@
-#include "Util.h"
+#ifndef JOGADOR_HEADER
+#define JOGADOR_HEADER
+
 #include "Objectos.h"
+#include "Util.h"
 
 
 
@@ -25,3 +28,5 @@ class Jogador{
 		void setHThread(HANDLE hThread);
 
 };
+
+#endif

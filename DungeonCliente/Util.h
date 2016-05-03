@@ -12,9 +12,6 @@
 #include <vector>
 #include <sstream>
 #include <fstream>
-#include <cstdlib>
-#include <iostream>
-#include <fstream>
 
 
 #define TAM 1024
@@ -51,8 +48,10 @@ using namespace std;
 #define tstringstream stringstream
 #endif
 
-typedef struct Jogos {
+typedef struct mensagemJogo {
+	bool erro;
 	TCHAR cmd[TAM];
-}Jogos;
+}Msg;
 
 #endif
+

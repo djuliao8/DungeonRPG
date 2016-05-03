@@ -1,4 +1,5 @@
-#include "Util.h"
+#ifndef MAPA_HEADER
+#define MAPA_HEADER
 #include "CelulaMapa.h"
 
 class Mapa{ //Conjunto de CelulaMapa's
@@ -7,3 +8,5 @@ class Mapa{ //Conjunto de CelulaMapa's
 	public:
 		Mapa(int lin, int col);
 };
+
+#endif

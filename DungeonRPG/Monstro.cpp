@@ -11,3 +11,4 @@ Monstro::Monstro(){
 		lentidao = 7;
 	}
 }
+
