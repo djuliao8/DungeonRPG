@@ -7,10 +7,11 @@
 //Classe que representa um jogador
 
 class Jogador{
-	int saude,lentidao;
+	int saude,lentidao, posicao;
 	tstring nome;
 	vector <Objectos> obj;
 	public:
+		Jogador();
 		Jogador(tstring n); 
 		void addObjecto();
 		void efeitosObjectos();

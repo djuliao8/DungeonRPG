@@ -11,6 +11,7 @@ class Mapa{ //Conjunto de CelulaMapa's
 		int getLinhas();
 		~Mapa();
 		CelulaMapa &getCelula(int lin, int col);
+		void colocaJogadorRandom();
 };
 
 #endif

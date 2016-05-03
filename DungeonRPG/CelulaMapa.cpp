@@ -2,7 +2,6 @@
 
 
 CelulaMapa::CelulaMapa(){	
-	monstro = nullptr;
 	objecto = nullptr;
 	jogador = nullptr;
 }
@@ -22,4 +21,15 @@ void CelulaMapa::setObjecto(){
 		objecto = new Objectos();
 }
 
+int CelulaMapa::getPorta(){
+	return porta;
+}
+
+int CelulaMapa::getParede(){
+	return parede;
+}
+
+void CelulaMapa::setJogador(){
+	jogador = new Jogador();
+}
 

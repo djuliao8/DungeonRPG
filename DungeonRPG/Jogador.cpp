@@ -1,5 +1,13 @@
 #include "Jogador.h"
 
+
+Jogador::Jogador(){
+	lentidao = 5;
+	saude = 10;
+	nome = TEXT("");
+	obj.clear();
+}
+
 Jogador::Jogador(tstring n){
 	lentidao = 5;
 	saude = 10;
