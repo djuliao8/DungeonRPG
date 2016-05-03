@@ -51,8 +51,10 @@ using namespace std;
 #define tstringstream stringstream
 #endif
 
-typedef struct Jogos {
+typedef struct mensagemJogo {
+	bool erro;
 	TCHAR cmd[TAM];
-}Jogos;
+}Msg;
+
 
 #endif

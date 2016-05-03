@@ -69,7 +69,7 @@ int _tmain(int argc, LPTSTR argv[]) {
 		*/
 
 		//Para passar de string para TCHAR
-		_tcscpy(tcmd, cmd.c_str());
+		wcscpy_s(tcmd, cmd.c_str());
 
 		//Envia comando, se falhar sai
 		enviaComando(tcmd);
