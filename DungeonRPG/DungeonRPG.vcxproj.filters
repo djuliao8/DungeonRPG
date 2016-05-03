@@ -27,9 +27,6 @@
     <ClCompile Include="CelulaMapa.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Monstro.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Objectos.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -48,9 +45,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CelulaMapa.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Monstro.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Objectos.h">
