@@ -1,20 +1,35 @@
 #ifndef JOGADOR_HEADER
 #define JOGADOR_HEADER
 
-#include "Objectos.h"
 #include "Util.h"
+#include "Objectos.h"
+
+
 
 //Classe que representa um jogador
 
-class Jogador{
-	int saude,lentidao, posicao;
+class Jogador {
+	int saude, lentidao;
 	tstring nome;
-	vector <Objectos> obj;
-	public:
-		Jogador();
-		Jogador(tstring n); 
-		void addObjecto();
-		void efeitosObjectos();
+	tstring pass;
+	HANDLE hPipeEnviar;
+	HANDLE hPipeReceber;
+	HANDLE hThread;
+	vector <Objectos *> obj;
+	int estado;
+
+public:
+	Jogador(HANDLE hPipeEnviar, HANDLE hPipeReceber);
+	HANDLE getHPipeEnviar();
+	HANDLE getHPipeReceber();
+	int getEstado();
+	void setEstado(int estado);
+	tstring getNome();
+	void setPass(tstring pass);
+	void setNome(tstring nome);
+	void setHThread(HANDLE hThread);
+	void addObjecto();
+	void efeitosObjectos();
 };
 
 #endif

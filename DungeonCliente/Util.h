@@ -12,9 +12,6 @@
 #include <vector>
 #include <sstream>
 #include <fstream>
-#include <cstdlib>
-#include <iostream>
-#include <fstream>
 
 
 #define TAM 1024
@@ -56,5 +53,5 @@ typedef struct mensagemJogo {
 	TCHAR cmd[TAM];
 }Msg;
 
-
 #endif
+
