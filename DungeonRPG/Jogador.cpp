@@ -4,11 +4,17 @@ Jogador::Jogador(HANDLE hPipeEnviar, HANDLE hPipeReceber) {
 	lentidao = 5;
 	saude = 10;
 	estado = LOGIN;
+	pedra = false;
 	this->hPipeEnviar = hPipeEnviar;
 	this->hPipeReceber = hPipeReceber;
-	obj.clear();
+	pedras.clear();
+	erro = false;
 }
 
+Jogador::Jogador()
+{
+	erro = true;
+}
 HANDLE Jogador::getHPipeEnviar()
 {
 	return hPipeEnviar;
@@ -25,9 +31,17 @@ void Jogador::setEstado(int estado)
 {
 	this->estado = estado;
 }
+bool Jogador::getErro()
+{
+	return erro;
+}
 tstring Jogador::getNome()
 {
 	return nome;
+}
+tstring Jogador::getPass()
+{
+	return pass;
 }
 void Jogador::setNome(tstring nome)
 {
@@ -37,35 +51,93 @@ void Jogador::setPass(tstring pass)
 {
 	this->pass = pass;
 }
-void Jogador::setHThread(HANDLE hThread)
+
+bool Jogador::addPedra(Objectos objecto)
+{ //No máximo 15 pedras
+	if (numPedras() <= 15) {
+		pedras.push_back(objecto);
+		return true;
+	}
+	return false;
+}
+
+bool Jogador::getPedra()
 {
-	this->hThread = hThread;
+	return pedra;
 }
 
-void Jogador::addObjecto(){ //No máximo 15 pedras
+void Jogador::setPedra(bool pedra)
+{
+	this->pedra = pedra;
+}
+
+int Jogador::numPedras()
+{
+	return (int)pedras.size();
+}
+
+bool Jogador::removePedra()
+{
+	if (numPedras() > 0)
+	{
+		pedras.pop_back();
+		return true;
+	}
+	return false;
+}
+
+void Jogador::usarRebucado()
+{
+
+}
+
+void Jogador::usarRedbull() 
+{
+	saude += 3;
+}
+
+void Jogador::usarVitaminas()
+{
+	saude += 1;
+}
+
+void Jogador::setPosX(int posX) 
+{
+	this->posX = posX;
+}
+
+void Jogador::setPosY(int posY) 
+{
+	this->posY = posY;
+}
+
+int Jogador::getPosX() 
+{
+	return posX;
+}
+
+int Jogador::getPosY() 
+{
+	return posY;
+}
+
+void Jogador::sofreDano(int dano)
+{
+	saude -= dano;
+}
+
+int Jogador::getVida()
+{
+	if (saude < 0)
+		return 0;
+	return saude;
+}
+
+bool Jogador::isMorto()
+{
+	if (saude <= 0)
+		return true;
+	return false;
 }
 
 
-void Jogador::efeitosObjectos(){
-	/*for (int i = 0; i < obj.size(); i++){
-		if (obj[i].getNomeObjecto() == TEXT("Rebuçado de Cafeína")){
-			obj.pop_back();
-			lentidao -= 2;
-		}
-		if (obj[i].getNomeObjecto() == TEXT("Vitaminas") && saude < 20){
-				obj.pop_back();
-				saude++;
-		}else{
-			if (obj[i].getNomeObjecto() == TEXT("Vitaminas") && saude >= 20)
-				obj.pop_back();
-			}
-		if (obj[i].getNomeObjecto() == TEXT("Garrafa de OrangeBull") && saude < 20){
-			obj.pop_back();
-			saude += 3;
-		}
-		else{
-			if (obj[i].getNomeObjecto() == TEXT("Garrafa de OrangeBull") && saude >= 20)
-				obj.pop_back();
-		}	
-	}*/
-}

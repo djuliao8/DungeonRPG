@@ -13,13 +13,15 @@
 #include <sstream>
 #include <fstream>
 #include <cstdlib>
-#include <iostream>
-#include <fstream>
-
+#include <aclapi.h>
+#include <strsafe.h>
+#include <time.h>
 
 #define TAM 1024
+#define DEFAULT_MAPA 70
 #define PIPE_LEITURA TEXT("\\\\.\\pipe\\PipeLeitura")//Le
 #define PIPE_ESCRITA TEXT("\\\\.\\pipe\\PipeEscrita")//Escreve
+#define REGISTRY_KEY TEXT("Software\\TP_SO2\\")
 
 //Estados
 
@@ -50,6 +52,7 @@ using namespace std;
 #define to_tstring to_string
 #define tstringstream stringstream
 #endif
+
 
 typedef struct mensagemJogo {
 	bool erro;

@@ -10,26 +10,47 @@
 
 class Jogador {
 	int saude, lentidao;
+	int posX, posY;
 	tstring nome;
 	tstring pass;
 	HANDLE hPipeEnviar;
 	HANDLE hPipeReceber;
-	HANDLE hThread;
-	vector <Objectos *> obj;
+	vector <Objectos> pedras;
 	int estado;
-
+	bool pedra;
+	bool erro;
 public:
 	Jogador(HANDLE hPipeEnviar, HANDLE hPipeReceber);
+	Jogador();
+
 	HANDLE getHPipeEnviar();
 	HANDLE getHPipeReceber();
 	int getEstado();
 	void setEstado(int estado);
+	bool getErro();
 	tstring getNome();
+	tstring getPass();
 	void setPass(tstring pass);
 	void setNome(tstring nome);
-	void setHThread(HANDLE hThread);
-	void addObjecto();
-	void efeitosObjectos();
+	int getVida();
+	bool isMorto();
+	
+	void setPedra(bool pedra);
+	bool getPedra();
+	void sofreDano(int dano);
+
+	void usarVitaminas();
+	void usarRebucado();
+	void usarRedbull();
+
+	bool addPedra(Objectos pedra);
+	int numPedras();
+	bool removePedra();
+
+	void setPosX(int posX);
+	void setPosY(int posY);
+	int getPosX();
+	int getPosY();
 };
 
 #endif

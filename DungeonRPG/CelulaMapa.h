@@ -7,18 +7,20 @@
 //Classe que representa cada Celula do Mapa
 
 class CelulaMapa{ 
-	Objectos *objecto;
+	Objectos objecto;
 	int parede;// 0 - Não tem parede, 1 - Tem parede
 	int porta; // 0- Não tem porta, 1 - Tem porta.... Se tem porta não pode ter parede!!! 
-	Jogador *jogador;
+
+
 	public:
 		CelulaMapa();
 		void setParede();
 		void setObjecto();
+		Objectos getObjecto();
+		void removeObjecto();
 		void setPorta();
 		int getPorta();
-		int getParede();
-		void setJogador();
+		bool asParede();
 };
 
 #endif

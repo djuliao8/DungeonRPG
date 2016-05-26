@@ -5,7 +5,6 @@ HANDLE hPipeLeitura, hPipeEscrita;
 HANDLE hThreadRecebe;
 HANDLE hMutex;
 bool threadActiva = true;
-bool modoScroll = false;
 
 void iniciaPipes();
 void intro();
@@ -37,36 +36,8 @@ int _tmain(int argc, LPTSTR argv[]) {
 
 	do
 	{
-		//if (!modoScroll)
-		//{
-			fflush(stdin);
-			getline(tcin, cmd);
-
-			if (cmd == TEXT("scroll"))
-			{
-				modoScroll = true;
-				cmd = TEXT("scroll 0 0");
-			}
-		/*}
-		else
-		{
-			tecla = c.getch();
-
-			if (tolower(tecla) == TEXT('c'))
-			{
-				modoScroll = false;
-			}
-
-			switch (tecla)
-			{
-			case c.CIMA: cmd = TEXT("scroll -1 0"); break;
-			case c.BAIXO: cmd = TEXT("scroll 1 0"); break;
-			case c.DIREITA: cmd = TEXT("scroll 0 1"); break;
-			case c.ESQUERDA: cmd = TEXT("scroll 0 -1"); break;
-			default: cmd = TEXT("scroll 0 0");
-			}
-		}
-		*/
+		fflush(stdin);
+		getline(tcin, cmd);
 
 		//Para passar de string para TCHAR
 		wcscpy_s(tcmd, cmd.c_str());

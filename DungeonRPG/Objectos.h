@@ -5,10 +5,10 @@
 //Classe que representa cada objecto
 
 class Objectos{
-	tstring Objecto;
+	tstring nome;
 	public:
 		Objectos();
-		Objectos getObjecto();
+		Objectos(tstring nome);
 		tstring getNomeObjecto();
 };
 
